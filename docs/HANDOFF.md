@@ -31,6 +31,9 @@ inside the Drips workspace. This repository's source of product intent remains
 - `/rush/new`, `/rush/manage`, `/rush/[slug]`, and `/rush/[slug]/edit` make
   this persistence usable. Only the new/manage/edit screens are proxy-protected;
   published proof pages remain public.
+- Verified Rush proof pages display the public Testnet vault reference from
+  `NEXT_PUBLIC_RUSH_VAULT_TESTNET_ID`. The reference is explicitly not proof
+  that an individual campaign has been funded.
 - Existing Neon deployments can apply the additive table through
   `npm run db:patch`; normal request paths also run the idempotent schema
   patch. The generated Drizzle migration is forward-safe for fresh or already
