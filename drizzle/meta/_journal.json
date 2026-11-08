@@ -1,0 +1,55 @@
+{
+  "version": "7",
+  "dialect": "postgresql",
+  "entries": [
+    {
+      "idx": 0,
+      "version": "7",
+      "when": 1780882879119,
+      "tag": "0000_happy_robin_chapel",
+      "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "7",
+      "when": 1780887200821,
+      "tag": "0001_opposite_shatterstar",
+      "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1780893938801,
+      "tag": "0002_cynical_silverclaw",
+      "breakpoints": true
+    },
+    {
+      "idx": 3,
+      "version": "7",
+      "when": 1749427200000,
+      "tag": "0003_add_questions_json",
+      "breakpoints": true
+    },
+    {
+      "idx": 4,
+      "version": "7",
+      "when": 1749513600000,
+      "tag": "0004_add_prize_pool",
+      "breakpoints": true
+    },
+    {
+      "idx": 5,
+      "version": "7",
+      "when": 1781679423209,
+      "tag": "0005_useful_satana",
+      "breakpoints": true
+    },
+    {
+      "idx": 6,
+      "version": "7",
+      "when": 1794160736727,
+      "tag": "0006_grey_fat_cobra",
+      "breakpoints": true
+    }
+  ]
+}

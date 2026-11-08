@@ -1,0 +1,681 @@
+@import url('https://fonts.googleapis.com/css2?family=Audiowide&family=Russo+One&family=Rajdhani:wght@300;400;500;600;700&family=Orbitron:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600;700&family=Chakra+Petch:wght@300;400;500;600;700&family=Tourney:wght@400;500;600;700;800&family=Zen+Dots&display=swap');
+@import "tailwindcss";
+
+
+/* ─── Bountixx Arena Palette ───
+   Primary:  #7C5CFF  (electric violet — accent, links, highlights, CTAs)
+   Bridge:   #DDEAE1  (mint — text on dark, light-mode canvas)
+   Coin:     #F0A500  (gold — wallet accents only)
+
+   The primary is the same hue in both themes. We only nudge brightness
+   so it remains readable on a near-black surface AND on a pale-mint surface
+   without screaming at the user when they toggle.
+─── */
+:root {
+  /* Gaming font system */
+  --font-display: 'Audiowide', 'Russo One', system-ui, sans-serif;
+  --font-body: 'Rajdhani', system-ui, sans-serif;
+  --font-stats: 'Orbitron', 'Rajdhani', system-ui, sans-serif;
+  --font-mono: 'JetBrains Mono', ui-monospace, monospace;
+  --font-legacy-display: 'Tourney', sans-serif;
+  --font-legacy-body: 'Chakra Petch', sans-serif;
+
+  --brand-primary:       #7C5CFF;
+  --brand-primary-light: #A78BFA;
+  --brand-primary-deep:  #5B3CE6;
+  --brand-button:        #7C5CFF;
+  --brand-button-hover:  #6A47F0;
+  --brand-bridge:        #DDEAE1;
+  --brand-bridge-dim:    #B8CFC4;
+  --brand-bridge-deep:   #9BB5A8;
+
+  /* Legacy aliases (Tailwind + existing components) */
+  --plum:       var(--brand-primary);
+  --plum-light: var(--brand-primary-light);
+  --plum-deep:  var(--brand-primary-deep);
+  --mint:       var(--brand-bridge);
+  --mint-dim:   var(--brand-bridge-dim);
+  --mint-deep:  var(--brand-bridge-deep);
+  --ignite:     var(--brand-primary);
+  --void:       var(--brand-primary);
+  --void-light: var(--brand-primary-light);
+  --void-deep:  var(--brand-primary-deep);
+  --crown:      #F0A500;
+  --danger:     #FB7185;
+  --success:    #6EE7B7;
+
+  --radius-sm:  8px;
+  --radius-md:  12px;
+  --radius-lg:  16px;
+  --radius-xl:  20px;
+
+  --theme-transition: background-color 0.4s cubic-bezier(0.4, 0, 0.2, 1),
+                      border-color 0.4s cubic-bezier(0.4, 0, 0.2, 1),
+                      color 0.3s ease,
+                      box-shadow 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* ─── Dark theme (default) — near-black canvas, violet accents, mint type ─── */
+:root,
+[data-theme="dark"] {
+  color-scheme: dark;
+
+  --cosmos:     #0B0A14;
+  --cosmos-2:   #11101D;
+  --cosmos-3:   #181628;
+  --cosmos-4:   #221F38;
+  --haze:       var(--brand-bridge);
+  --haze-2:     #B8CFC4;
+  --haze-3:     #8FA89C;
+
+  --surface-card:    rgba(124, 92, 255, 0.06);
+  --surface-raised:  #11101D;
+  --surface-inset:   #0F0E1A;
+  --surface-hover:   rgba(124, 92, 255, 0.10);
+  --border-1:        rgba(221, 234, 225, 0.09);
+  --border-2:        rgba(221, 234, 225, 0.16);
+  --border-accent:   rgba(124, 92, 255, 0.45);
+  --void-tint:       rgba(124, 92, 255, 0.12);
+  --void-tint-hover: rgba(124, 92, 255, 0.22);
+  --glow-1:          rgba(124, 92, 255, 0.10);
+  --terminal-bg:     #11101D;
+  --terminal-border: rgba(221, 234, 225, 0.12);
+  --focus-ring:      rgba(124, 92, 255, 0.4);
+  --btn-primary-bg:  var(--brand-primary);
+  --btn-primary-fg:  #FFFFFF;
+  --btn-primary-hover: var(--brand-primary-deep);
+  --accent:          var(--brand-primary);
+  --success:         #6EE7B7;
+  --danger:          #FB7185;
+  --coin-gold-text:  #F0A500;
+}
+
+/* ─── Light theme — soft cream-mint canvas, deep slate ink, white elevated surfaces ─── */
+[data-theme="light"] {
+  color-scheme: light;
+
+  --cosmos:     #F4F1FA;
+  --cosmos-2:   #ECE6F7;
+  --cosmos-3:   #E1D9F3;
+  --cosmos-4:   #C9BDE6;
+  --haze:       #1F1B36;
+  --haze-2:     #4A4470;
+  --haze-3:     #7A7194;
+
+  --surface-card:    #FFFFFF;
+  --surface-raised:  #FFFFFF;
+  --surface-inset:   #FAF8FF;
+  --surface-hover:   rgba(124, 92, 255, 0.06);
+  --border-1:        rgba(31, 27, 54, 0.10);
+  --border-2:        rgba(31, 27, 54, 0.18);
+  --border-accent:   rgba(91, 60, 230, 0.45);
+  --void-tint:       rgba(124, 92, 255, 0.08);
+  --void-tint-hover: rgba(124, 92, 255, 0.14);
+  --glow-1:          rgba(124, 92, 255, 0.06);
+  --terminal-bg:     #FFFFFF;
+  --terminal-border: rgba(31, 27, 54, 0.14);
+  --focus-ring:      rgba(91, 60, 230, 0.32);
+  --btn-primary-bg:  var(--brand-primary-deep);
+  --btn-primary-fg:  #FFFFFF;
+  --btn-primary-hover: #4A2DD0;
+  --accent:          var(--brand-primary-deep);
+  --success:         #059669;
+  --danger:          #DC2626;
+  --coin-gold-text:  #B27A00;
+}
+
+/* ─── Legacy cyber aesthetic (Hero + auth left panel only) ─── */
+[data-legacy-aesthetic] {
+  --cosmos:     #0B0A14;
+  --cosmos-2:   #11101D;
+  --cosmos-3:   #181628;
+  --cosmos-4:   #221F38;
+  --haze:       #E8E4FF;
+  --haze-2:     #B0A8D6;
+  --haze-3:     #8278B0;
+  --void:       var(--brand-primary);
+  --void-light: var(--brand-primary-light);
+  --void-deep:  var(--brand-primary-deep);
+  --ignite:     #FF6B1A;
+  --crown:      #F0A500;
+}
+
+/* ─── Tailwind v4 Theme — bind utilities to live CSS variables ─── */
+@theme inline {
+  --color-brand-primary: var(--brand-primary);
+  --color-brand-primary-light: var(--brand-primary-light);
+  --color-brand-primary-deep: var(--brand-primary-deep);
+  --color-brand-button: var(--brand-button);
+  --color-brand-button-hover: var(--brand-button-hover);
+  --color-brand-bridge: var(--brand-bridge);
+  --color-plum: var(--plum);
+  --color-plum-light: var(--plum-light);
+  --color-plum-deep: var(--plum-deep);
+  --color-mint: var(--mint);
+  --color-mint-dim: var(--mint-dim);
+  --color-mint-deep: var(--mint-deep);
+  --color-ignite: var(--ignite);
+  --color-crown: var(--crown);
+  --color-void-light: var(--void-light);
+  --color-void: var(--void);
+  --color-void-deep: var(--void-deep);
+  --color-cosmos: var(--cosmos);
+  --color-cosmos-2: var(--cosmos-2);
+  --color-cosmos-3: var(--cosmos-3);
+  --color-cosmos-4: var(--cosmos-4);
+  --color-haze: var(--haze);
+  --color-haze-2: var(--haze-2);
+  --color-haze-3: var(--haze-3);
+  --color-danger: var(--danger);
+  --color-success: var(--success);
+  --color-coin-gold: var(--coin-gold-text);
+  --radius-sm: 8px;
+  --radius-md: 12px;
+  --radius-lg: 16px;
+}
+
+/* ─── Base ─── */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+html {
+  scroll-behavior: auto;
+  background: var(--cosmos);
+  transition: var(--theme-transition);
+}
+
+body {
+  background: var(--cosmos);
+  color: var(--haze);
+  font-family: var(--font-body), "Plus Jakarta Sans", system-ui, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  overflow-x: hidden;
+  transition: background-color 0.35s cubic-bezier(0.4, 0, 0.2, 1),
+              color 0.3s ease;
+}
+
+/* Theme transitions on layout shells only (avoids flashing every child) */
+html,
+body,
+header,
+nav,
+main,
+footer,
+.bx-card,
+.auth-form-card,
+.auth-form-panel {
+  transition: background-color 0.35s cubic-bezier(0.4, 0, 0.2, 1),
+              border-color 0.35s cubic-bezier(0.4, 0, 0.2, 1),
+              color 0.3s ease,
+              box-shadow 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* ─── Scrollbar ─── */
+::-webkit-scrollbar { width: 6px; }
+::-webkit-scrollbar-track { background: var(--cosmos-2); }
+::-webkit-scrollbar-thumb { background: var(--cosmos-4); border-radius: 6px; }
+::-webkit-scrollbar-thumb:hover { background: var(--brand-primary); }
+
+/* ─── Focus ─── */
+:focus-visible {
+  outline: 2px solid var(--brand-primary);
+  outline-offset: 2px;
+}
+
+/* ─── Typography ─── */
+.font-body,
+.font-rajdhani {
+  font-family: var(--font-body), "Rajdhani", system-ui, sans-serif;
+  letter-spacing: 0.005em;
+}
+
+.font-display,
+.font-zen-dots,
+.font-nunito,
+.font-heading {
+  font-family: var(--font-display), "Audiowide", "Russo One", system-ui, sans-serif;
+  letter-spacing: 0.01em;
+}
+
+.font-stats,
+.font-orbitron {
+  font-family: var(--font-stats), "Orbitron", system-ui, sans-serif;
+  font-variant-numeric: tabular-nums;
+  letter-spacing: 0.005em;
+}
+
+.font-mono,
+.font-space-mono {
+  font-family: var(--font-mono), "JetBrains Mono", ui-monospace, monospace;
+  letter-spacing: 0.01em;
+}
+
+[data-legacy-aesthetic] .font-display,
+[data-legacy-aesthetic] .font-zen-dots {
+  font-family: var(--font-legacy-display), "Tourney", sans-serif;
+  letter-spacing: 0.02em;
+}
+
+[data-legacy-aesthetic] .font-body,
+[data-legacy-aesthetic] .font-rajdhani {
+  font-family: var(--font-legacy-body), "Chakra Petch", sans-serif;
+}
+
+/* ─── Shared horizontal page gutters (app + landing) ─── */
+.page-gutters {
+  width: 100%;
+  max-width: 1680px;
+  margin-inline: auto;
+  padding-left: max(clamp(1.125rem, 4.5vw, 7.5rem), env(safe-area-inset-left, 0px));
+  padding-right: max(clamp(1.125rem, 4.5vw, 7.5rem), env(safe-area-inset-right, 0px));
+}
+
+/* ─── Landing fluid spacing — scales on every viewport ─── */
+:root {
+  --landing-section-py: clamp(3.25rem, 8vw, 7.5rem);
+  --landing-block-gap: clamp(2.75rem, 5.5vw, 6.5rem);
+  --landing-subsection-gap: clamp(2rem, 3.5vw, 4.5rem);
+  --landing-intro-mb: clamp(3rem, 6vw, 8rem);
+  --landing-divider-pt: clamp(2.5rem, 5vw, 5.5rem);
+  --landing-step-gap: clamp(2.5rem, 7vw, 5.5rem);
+  --landing-card-gap: clamp(1.75rem, 3.5vw, 4rem);
+  --landing-surface-py: clamp(1.5rem, 3.2vw, 3.25rem);
+  --landing-surface-px: clamp(1.25rem, 2.8vw, 2.75rem);
+  --landing-copy-gap: clamp(1.25rem, 2.5vw, 2.5rem);
+  --landing-footer-py: clamp(3.5rem, 7vw, 7rem);
+}
+
+.landing-section {
+  padding-block: var(--landing-section-py);
+}
+
+.landing-block-stack {
+  display: flex;
+  flex-direction: column;
+  gap: var(--landing-block-gap);
+  width: 100%;
+  min-width: 0;
+}
+
+.landing-subsection-stack {
+  display: flex;
+  flex-direction: column;
+  gap: var(--landing-subsection-gap);
+  width: 100%;
+  min-width: 0;
+}
+
+.landing-intro-spacing {
+  margin-bottom: var(--landing-intro-mb);
+}
+
+.landing-divider-top {
+  padding-top: var(--landing-divider-pt);
+  border-top: 1px solid var(--border-1);
+}
+
+.landing-step-stack {
+  display: flex;
+  flex-direction: column;
+  gap: var(--landing-step-gap);
+  width: 100%;
+  min-width: 0;
+  padding-bottom: clamp(2rem, 4vw, 4rem);
+}
+
+.landing-card-grid {
+  display: grid;
+  width: 100%;
+  min-width: 0;
+  gap: var(--landing-card-gap);
+}
+
+.landing-card-grid--2 {
+  grid-template-columns: 1fr;
+}
+
+@media (min-width: 640px) {
+  .landing-card-grid--2 {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+.landing-card-grid--3 {
+  grid-template-columns: 1fr;
+}
+
+@media (min-width: 640px) {
+  .landing-card-grid--3 {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (min-width: 1024px) {
+  .landing-card-grid--3 {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
+
+.landing-bundle-grid {
+  display: grid;
+  width: 100%;
+  min-width: 0;
+  gap: var(--landing-card-gap);
+  grid-template-columns: 1fr;
+}
+
+@media (min-width: 480px) {
+  .landing-bundle-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (min-width: 1024px) {
+  .landing-bundle-grid {
+    grid-template-columns: repeat(auto-fit, minmax(12rem, 1fr));
+    justify-items: center;
+  }
+}
+
+.landing-surface {
+  border-radius: clamp(0.75rem, 1.5vw, 1rem);
+  padding: var(--landing-surface-py) var(--landing-surface-px);
+  min-width: 0;
+}
+
+.landing-copy-stack {
+  display: flex;
+  flex-direction: column;
+  gap: var(--landing-copy-gap);
+}
+
+.landing-footer-pad {
+  padding-block: var(--landing-footer-py);
+}
+
+/* ─── Form primitives ─── */
+.bx-label {
+  display: block;
+  font-family: var(--font-body), system-ui, sans-serif;
+  font-size: 0.8125rem;
+  font-weight: 600;
+  color: var(--haze-2);
+  margin-bottom: 0.5rem;
+}
+
+.bx-input {
+  width: 100%;
+  height: 3rem;
+  padding: 0 1rem;
+  background: var(--surface-inset);
+  border: 1px solid var(--border-2);
+  border-radius: var(--radius-md);
+  color: var(--haze);
+  font-family: var(--font-body), system-ui, sans-serif;
+  font-size: 0.9375rem;
+  transition: border-color 0.15s ease, box-shadow 0.15s ease;
+}
+
+.bx-input::placeholder { color: var(--haze-3); }
+
+.bx-input:focus {
+  outline: none;
+  border-color: var(--brand-primary);
+  box-shadow: 0 0 0 3px var(--focus-ring);
+}
+
+.bx-card {
+  background: var(--surface-card);
+  border: 1px solid var(--border-1);
+  border-radius: var(--radius-lg);
+  backdrop-filter: blur(12px);
+}
+
+/* Auth pages — both panels share the same theme surface */
+.auth-form-panel {
+  background: transparent;
+}
+
+.auth-form-shell {
+  background: var(--cosmos);
+}
+
+.auth-brand-panel {
+  background-color: var(--cosmos);
+  border-right: 1px solid var(--border-1);
+  transition: background-color 0.35s cubic-bezier(0.4, 0, 0.2, 1),
+              border-color 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.auth-brand-panel .auth-brand-canvas,
+.auth-brand-panel .auth-brand-media {
+  background-color: var(--cosmos);
+}
+
+/* SVG object tags default to white — keep canvas visible in both themes */
+[data-theme="dark"] .auth-brand-panel .auth-brand-scrim {
+  background:
+    radial-gradient(ellipse 92% 88% at 50% 50%, transparent 42%, var(--cosmos) 100%),
+    linear-gradient(180deg, var(--cosmos) 0%, transparent 14%, transparent 86%, var(--cosmos) 100%);
+  box-shadow: inset 0 0 80px 48px var(--cosmos);
+}
+
+[data-theme="light"] .auth-brand-panel .auth-brand-scrim {
+  display: none;
+}
+
+/* ─── Clip-path (legacy compat, neutralized) ─── */
+.clip-arena,
+.clip-arena-sm { clip-path: none; border-radius: var(--radius-md); }
+
+/* ─── Landing section backdrop (clean, no grid) ─── */
+.cyber-grid::before { display: none; }
+.cyber-edge::after { display: none; }
+
+/* ─── Scan-line (disabled globally) ─── */
+.scanline-fx::after { display: none; }
+
+/* ─── Live dot pulse ─── */
+@keyframes livepulse {
+  0%, 100% { opacity: 1; }
+  50%       { opacity: 0.35; }
+}
+.dot-live { display: inline-block; animation: livepulse 1.4s ease-in-out infinite; }
+
+/* ─── Pulse rings ─── */
+@keyframes pulsering {
+  0%   { transform: scale(1); opacity: 0.35; }
+  100% { transform: scale(1.5); opacity: 0; }
+}
+.pulse-ring { animation: pulsering 2s ease-out infinite; }
+.pulse-ring-delay { animation: pulsering 2s ease-out 0.7s infinite; }
+
+/* ─── Ticker ─── */
+@keyframes ticker-ltr { from { transform: translateX(0); } to { transform: translateX(-50%); } }
+@keyframes ticker-rtl { from { transform: translateX(-50%); } to { transform: translateX(0); } }
+.ticker-ltr { animation: ticker-ltr 30s linear infinite; }
+.ticker-rtl { animation: ticker-rtl 36s linear infinite; }
+.ticker-ltr:hover, .ticker-rtl:hover { animation-play-state: paused; }
+
+/* ─── Spinner ─── */
+@keyframes spin360 { to { transform: rotate(360deg); } }
+.spinner {
+  width: 20px; height: 20px;
+  border: 2px solid var(--cosmos-4);
+  border-top-color: var(--brand-primary);
+  border-radius: 50%;
+  animation: spin360 0.65s linear infinite;
+}
+
+/* ─── Skeleton shimmer ─── */
+@keyframes shimmer { from { transform: translateX(-100%); } to { transform: translateX(100%); } }
+.skeleton { position: relative; overflow: hidden; background: var(--cosmos-3); border-radius: var(--radius-sm); }
+.skeleton::after {
+  content: '';
+  position: absolute; inset: 0;
+  background: linear-gradient(90deg, transparent 0%, rgba(255,255,255,0.05) 50%, transparent 100%);
+  animation: shimmer 1.6s infinite;
+}
+
+/* ─── Gradient text ─── */
+.text-gradient-fire {
+  background: linear-gradient(135deg, var(--brand-primary), var(--brand-primary-light));
+  -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+}
+.text-gradient-void {
+  background: linear-gradient(135deg, var(--brand-primary-light), var(--brand-primary));
+  -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+}
+
+/* ─── Glow helpers (subtle) ─── */
+.glow-ignite  { box-shadow: 0 4px 24px rgba(124, 92, 255, 0.28); }
+.glow-crown   { box-shadow: 0 4px 24px rgba(240, 165,   0, 0.22); }
+.glow-void    { box-shadow: 0 4px 24px rgba(124, 92, 255, 0.22); }
+.glow-success { box-shadow: 0 4px 20px rgba(110, 231, 183, 0.22); }
+
+/* ─── Float bob ─── */
+@keyframes bob { 0%,100% { transform: translateY(0); } 50% { transform: translateY(-8px); } }
+.bob { animation: bob 2.8s ease-in-out infinite; }
+
+/* ─── Counter ring rotation ─── */
+@keyframes ring-spin { to { transform: rotate(360deg); } }
+@keyframes ring-spin-rev { to { transform: rotate(-360deg); } }
+.ring-spin     { animation: ring-spin 8s linear infinite; transform-origin: center; }
+.ring-spin-rev { animation: ring-spin-rev 10s linear infinite; transform-origin: center; }
+
+/* ─── Confetti particle ─── */
+@keyframes confetti-fall {
+  0%   { transform: translateY(-10px) rotate(0deg); opacity: 1; }
+  100% { transform: translateY(100vh) rotate(720deg); opacity: 0; }
+}
+
+/* ─── Typewriter cursor ─── */
+@keyframes cursor-blink { 0%,100% { opacity: 1; } 50% { opacity: 0; } }
+.cursor-blink { animation: cursor-blink 0.8s step-start infinite; }
+
+/* ─── Reduced motion ─── */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+/* ─── Ghost loading animation (themed) ─── */
+#ghost { position: relative; scale: 0.8; }
+
+#red {
+  animation: upNDown infinite 0.5s;
+  position: relative;
+  width: 140px; height: 140px;
+  display: grid;
+  grid-template-columns: repeat(14, 1fr);
+  grid-template-rows: repeat(14, 1fr);
+  grid-column-gap: 0px; grid-row-gap: 0px;
+  grid-template-areas:
+    "a1  a2  a3  a4  a5  top0  top0  top0  top0  a10 a11 a12 a13 a14"
+    "b1  b2  b3  top1 top1 top1 top1 top1 top1 top1 top1 b12 b13 b14"
+    "c1 c2 top2 top2 top2 top2 top2 top2 top2 top2 top2 top2 c13 c14"
+    "d1 top3 top3 top3 top3 top3 top3 top3 top3 top3 top3 top3 top3 d14"
+    "e1 top3 top3 top3 top3 top3 top3 top3 top3 top3 top3 top3 top3 e14"
+    "f1 top3 top3 top3 top3 top3 top3 top3 top3 top3 top3 top3 top3 f14"
+    "top4 top4 top4 top4 top4 top4 top4 top4 top4 top4 top4 top4 top4 top4"
+    "top4 top4 top4 top4 top4 top4 top4 top4 top4 top4 top4 top4 top4 top4"
+    "top4 top4 top4 top4 top4 top4 top4 top4 top4 top4 top4 top4 top4 top4"
+    "top4 top4 top4 top4 top4 top4 top4 top4 top4 top4 top4 top4 top4 top4"
+    "top4 top4 top4 top4 top4 top4 top4 top4 top4 top4 top4 top4 top4 top4"
+    "top4 top4 top4 top4 top4 top4 top4 top4 top4 top4 top4 top4 top4 top4"
+    "st0 st0 an4 st1 an7 st2 an10 an10 st3 an13 st4 an16 st5 st5"
+    "an1 an2 an3 an5 an6 an8 an9 an9 an11 an12 an14 an15 an17 an18";
+}
+
+@keyframes upNDown {
+  0%, 49% { transform: translateY(0px); }
+  50%, 100% { transform: translateY(-10px); }
+}
+
+#top0, #top1, #top2, #top3, #top4, #st0, #st1, #st2, #st3, #st4, #st5 { background-color: var(--brand-primary); }
+#top0 { grid-area: top0; } #top1 { grid-area: top1; } #top2 { grid-area: top2; }
+#top3 { grid-area: top3; } #top4 { grid-area: top4; }
+#st0 { grid-area: st0; } #st1 { grid-area: st1; } #st2 { grid-area: st2; }
+#st3 { grid-area: st3; } #st4 { grid-area: st4; } #st5 { grid-area: st5; }
+
+#an1 { grid-area: an1; animation: flicker0 infinite 0.5s; }
+#an18 { grid-area: an18; animation: flicker0 infinite 0.5s; }
+#an2 { grid-area: an2; animation: flicker1 infinite 0.5s; }
+#an17 { grid-area: an17; animation: flicker1 infinite 0.5s; }
+#an3 { grid-area: an3; animation: flicker1 infinite 0.5s; }
+#an16 { grid-area: an16; animation: flicker1 infinite 0.5s; }
+#an4 { grid-area: an4; animation: flicker1 infinite 0.5s; }
+#an15 { grid-area: an15; animation: flicker1 infinite 0.5s; }
+#an6 { grid-area: an6; animation: flicker0 infinite 0.5s; }
+#an12 { grid-area: an12; animation: flicker0 infinite 0.5s; }
+#an7 { grid-area: an7; animation: flicker0 infinite 0.5s; }
+#an13 { grid-area: an13; animation: flicker0 infinite 0.5s; }
+#an9 { grid-area: an9; animation: flicker1 infinite 0.5s; }
+#an10 { grid-area: an10; animation: flicker1 infinite 0.5s; }
+#an8 { grid-area: an8; animation: flicker0 infinite 0.5s; }
+#an11 { grid-area: an11; animation: flicker0 infinite 0.5s; }
+
+@keyframes flicker0 {
+  0%, 49% { background-color: var(--brand-primary); }
+  50%, 100% { background-color: transparent; }
+}
+@keyframes flicker1 {
+  0%, 49% { background-color: transparent; }
+  50%, 100% { background-color: var(--brand-primary); }
+}
+
+#eye, #eye1 { width: 40px; height: 50px; position: absolute; top: 30px; }
+#eye { left: 10px; } #eye1 { right: 30px; }
+#eye::before, #eye1::before {
+  content: ""; background-color: white; width: 20px; height: 50px;
+  transform: translateX(10px); display: block; position: absolute;
+}
+#eye::after, #eye1::after {
+  content: ""; background-color: white; width: 40px; height: 30px;
+  transform: translateY(10px); display: block; position: absolute;
+}
+
+#pupil, #pupil1 {
+  width: 20px; height: 20px; background-color: var(--brand-primary);
+  position: absolute; top: 50px; z-index: 1;
+  animation: eyesMovement infinite 3s;
+}
+#pupil { left: 10px; } #pupil1 { right: 50px; }
+
+@keyframes eyesMovement {
+  0%, 49% { transform: translateX(0px); }
+  50%, 99% { transform: translateX(10px); }
+  100% { transform: translateX(0px); }
+}
+
+#shadow {
+  background-color: black; width: 140px; height: 140px;
+  position: absolute; border-radius: 50%;
+  transform: rotateX(80deg); filter: blur(20px); top: 80%;
+  animation: shadowMovement infinite 0.5s;
+}
+@keyframes shadowMovement {
+  0%, 49% { opacity: 0.5; }
+  50%, 100% { opacity: 0.2; }
+}
+
+/* ─── View Transition API circular wipe custom rules ─── */
+::view-transition-old(root),
+::view-transition-new(root) {
+  animation: none;
+  mix-blend-mode: normal;
+}
+::view-transition-old(root) {
+  z-index: 1;
+}
+::view-transition-new(root) {
+  z-index: 2;
+}
+[data-theme="light"]::view-transition-old(root) {
+  z-index: 2;
+}
+[data-theme="light"]::view-transition-new(root) {
+  z-index: 1;
+}

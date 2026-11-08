@@ -1,0 +1,102 @@
+"use client";
+
+import type React from "react";
+import { useRef } from "react";
+import { motion, useInView } from "framer-motion";
+import Link from "next/link";
+import { ArrowRight } from "lucide-react";
+import { Button } from "@/components/ui/Button";
+import { Accent, LANDING_GUTTERS, LANDING_SECTION } from "@/components/landing/_section";
+
+export function FinalCTA() {
+  const ref = useRef<HTMLDivElement>(null);
+  const inView = useInView(ref, { once: true, margin: "-8% 0px" });
+
+  return (
+    <section
+      ref={ref}
+      className={`cyber-grid relative ${LANDING_SECTION} bg-cosmos overflow-hidden text-center`}
+    >
+      <div
+        className="absolute inset-0 pointer-events-none"
+        aria-hidden
+        style={{
+          background: "radial-gradient(ellipse 65% 55% at 50% 45%, rgba(168,85,247,0.09), transparent 70%)",
+        }}
+      />
+
+      <span
+        aria-hidden
+        className="absolute top-0 left-0 right-0 h-px"
+        style={{
+          marginInline: "max(clamp(1.125rem, 4.5vw, 7.5rem), env(safe-area-inset-left, 0px))",
+          width: "auto",
+          background:
+            "linear-gradient(90deg, transparent, var(--border-2) 40%, var(--border-2) 60%, transparent)",
+        }}
+      />
+
+      <div className={`${LANDING_GUTTERS} relative flex w-full flex-col items-center`}>
+        <div className="w-full max-w-3xl mx-auto flex flex-col items-center text-center">
+          <motion.h2
+            initial={{ opacity: 0, y: 36 }}
+            animate={inView ? { opacity: 1, y: 0 } : {}}
+            transition={{ duration: 0.7, ease: [0.16, 1, 0.3, 1] }}
+            className="font-zen-dots text-[clamp(2rem,5.5vw,4rem)] text-haze mb-[clamp(1.75rem,3vw,2.5rem)] leading-[1.15] text-balance"
+          >
+            Ready to enter <Accent>the arena?</Accent>
+          </motion.h2>
+
+          <motion.p
+            initial={{ opacity: 0, y: 16 }}
+            animate={inView ? { opacity: 1, y: 0 } : {}}
+            transition={{ duration: 0.6, delay: 0.12 }}
+            className="font-rajdhani text-base sm:text-lg md:text-xl text-haze-2 mb-[clamp(2rem,4vw,3.5rem)] mx-auto max-w-lg leading-[1.85]"
+          >
+            No subscription. No card required. Start with 1,000 welcome coins. The AI structures the challenge, you bring the skill.
+          </motion.p>
+
+          <motion.div
+            initial={{ opacity: 0, y: 16 }}
+            animate={inView ? { opacity: 1, y: 0 } : {}}
+            transition={{ duration: 0.55, delay: 0.25 }}
+            className="flex flex-col items-center gap-[clamp(1.25rem,2.5vw,2rem)] w-full"
+          >
+            <Link href="/signup" className="block w-full sm:w-auto">
+              <Button
+                variant="primary"
+                size="lg"
+                magnetic
+                className="w-full sm:w-auto text-base px-12 h-[56px] gap-3 group justify-center"
+                style={{
+                  background: "var(--void)",
+                  borderColor: "var(--void)",
+                  boxShadow: "0 0 48px rgba(168,85,247,0.30)",
+                } as React.CSSProperties}
+              >
+                Create your first arena
+                <ArrowRight size={16} aria-hidden className="transition-transform group-hover:translate-x-1" />
+              </Button>
+            </Link>
+
+            <Link
+              href="/login"
+              className="cursor-target font-space-mono text-[11px] text-haze-2 hover:text-haze transition-colors tracking-[2px] uppercase"
+            >
+              Already competing? Sign in →
+            </Link>
+          </motion.div>
+
+          <motion.p
+            initial={{ opacity: 0 }}
+            animate={inView ? { opacity: 1 } : {}}
+            transition={{ delay: 0.5 }}
+            className="mt-[clamp(2rem,4vw,3.5rem)] font-space-mono text-[10px] text-haze-3 tracking-[3px] uppercase leading-[1.8]"
+          >
+            No subscription · Anti-cheat AI · Coins land instantly
+          </motion.p>
+        </div>
+      </div>
+    </section>
+  );
+}

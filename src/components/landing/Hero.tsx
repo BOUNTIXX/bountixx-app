@@ -1,0 +1,160 @@
+"use client";
+
+import type React from "react";
+import { useRef } from "react";
+import { motion, useScroll, useTransform, useReducedMotion } from "framer-motion";
+import Link from "next/link";
+import { Zap, ChevronRight } from "lucide-react";
+import { Button } from "@/components/ui/Button";
+import Lottie from "lottie-react";
+import bountixxAnimation from "@/data/bountixx.json";
+import { LANDING_GUTTERS } from "@/components/landing/_section";
+
+const fadeUp = (delay: number) => ({
+  initial: { opacity: 0, y: 20 },
+  animate: { opacity: 1, y: 0 },
+  transition: { delay, duration: 0.7, ease: [0.16, 1, 0.3, 1] as const },
+});
+
+export function Hero() {
+  const sectionRef = useRef<HTMLElement>(null);
+  const reduceMotion = useReducedMotion();
+
+  const { scrollYProgress } = useScroll({
+    target: sectionRef,
+    offset: ["start start", "end start"],
+  });
+  const fadeOut = useTransform(scrollYProgress, [0, 0.6], [1, 0]);
+  const animScale = useTransform(scrollYProgress, [0, 1], [1, 1.08]);
+
+  return (
+    <section
+      ref={sectionRef}
+      className="relative min-h-[100dvh] flex flex-col overflow-hidden bg-cosmos"
+      aria-label="Bountixx — Drop a challenge, claim the bounty"
+    >
+      {/* ── Ambient glow ── */}
+      <div
+        className="absolute inset-0 z-0 pointer-events-none"
+        style={{
+          background:
+            "radial-gradient(ellipse 80% 55% at 50% 40%, rgba(155,107,255,0.20) 0%, transparent 68%)," +
+            "radial-gradient(ellipse 60% 40% at 50% 80%, rgba(255,107,26,0.10) 0%, transparent 70%)",
+        }}
+        aria-hidden
+      />
+
+      {/* ── Background Lottie — contained and dimmed so it never competes with the headline ── */}
+      <motion.div
+        className="absolute inset-0 z-0 pointer-events-none overflow-hidden opacity-60"
+        style={{ scale: reduceMotion ? 1 : animScale }}
+        aria-hidden
+      >
+        <Lottie
+          animationData={bountixxAnimation}
+          loop
+          autoplay
+          style={{ width: "100%", height: "100%" }}
+          rendererSettings={{ preserveAspectRatio: "xMidYMid slice" }}
+        />
+      </motion.div>
+
+      {/* ── Legibility scrim ── */}
+      <div className="absolute inset-0 z-[1] pointer-events-none" aria-hidden>
+        <div
+          className="absolute inset-0"
+          style={{
+            background:
+              "linear-gradient(180deg, rgba(14,8,24,0.88) 0%, rgba(14,8,24,0.45) 30%, rgba(14,8,24,0.35) 55%, rgba(14,8,24,0.70) 82%, rgba(14,8,24,0.96) 100%)",
+          }}
+        />
+        <div
+          className="absolute inset-0"
+          style={{
+            background:
+              "radial-gradient(ellipse 95% 80% at 50% 50%, transparent 42%, rgba(14,8,24,0.6) 100%)",
+          }}
+        />
+      </div>
+
+      {/* ── HUD content — single centered column, normal flow so nothing overlaps ── */}
+      <motion.div
+        className={`relative z-10 flex-1 flex flex-col items-center justify-center text-center w-full ${LANDING_GUTTERS} pt-28 pb-20 md:pt-32 md:pb-24`}
+        style={{ opacity: fadeOut }}
+      >
+        <motion.h1
+          {...fadeUp(0.25)}
+          className="font-zen-dots text-balance"
+          style={{
+            fontSize: "clamp(2rem, 6vw, 4.4rem)",
+            letterSpacing: "0.02em",
+            lineHeight: "1.18",
+          }}
+        >
+          <span className="text-haze">DROP A CHALLENGE.</span>
+          <br />
+          <span
+            style={{
+              background: "linear-gradient(110deg, #FF6B1A 0%, #FF7A5C 50%, #F0A500 100%)",
+              WebkitBackgroundClip: "text",
+              WebkitTextFillColor: "transparent",
+              backgroundClip: "text",
+              filter: "drop-shadow(0 0 26px rgba(255,107,26,0.25))",
+            }}
+          >
+            CLAIM THE BOUNTY.
+          </span>
+        </motion.h1>
+
+        <motion.p
+          {...fadeUp(0.45)}
+          className="font-rajdhani text-base md:text-xl text-haze-2 max-w-xl mt-6 leading-relaxed"
+        >
+          The AI builds the room, your rivals fill the slots, and a deterministic
+          judge crowns one winner. Settle it in thirty seconds.
+        </motion.p>
+
+        <motion.div
+          {...fadeUp(0.65)}
+          className="flex flex-col sm:flex-row items-center gap-4 mt-10"
+        >
+          <Link href="/signup">
+            <Button
+              variant="primary"
+              size="lg"
+              magnetic
+              className="text-base px-10 h-14 group relative overflow-hidden"
+              style={
+                {
+                  background: "#FF6B1A",
+                  borderColor: "#FF6B1A",
+                  boxShadow:
+                    "0 0 40px rgba(255,107,26,0.45), 0 0 80px rgba(255,107,26,0.16), inset 0 1px 0 rgba(255,255,255,0.15)",
+                } as React.CSSProperties
+              }
+            >
+              <Zap size={16} className="mr-2 transition-transform group-hover:rotate-12 group-hover:scale-110" aria-hidden />
+              ENTER THE ARENA
+            </Button>
+          </Link>
+          <Link href="#how-it-works">
+            <Button
+              variant="ghost"
+              size="lg"
+              magnetic
+              className="text-base text-haze-2 gap-2 hover:text-haze"
+              style={{
+                backdropFilter: "blur(8px)",
+                background: "rgba(14,8,24,0.4)",
+                border: "1px solid rgba(45,27,105,0.6)",
+              }}
+            >
+              See how it works
+              <ChevronRight size={14} aria-hidden />
+            </Button>
+          </Link>
+        </motion.div>
+      </motion.div>
+    </section>
+  );
+}

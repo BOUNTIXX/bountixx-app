@@ -1,0 +1,106 @@
+/* Custom cursor — ring + dot (idle) / morphing frame (hover) / glow (press) */
+
+.bx-cursor-root {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 9999;
+  transition: opacity 0.2s ease;
+}
+.bx-cursor-root.is-hidden {
+  opacity: 0;
+}
+
+/* Idle ring — trails the pointer */
+.bx-cursor-ring {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 30px;
+  height: 30px;
+  margin: -15px 0 0 -15px;
+  border: 1.5px solid var(--void);
+  border-radius: 50%;
+  opacity: 0.55;
+  will-change: transform;
+  transition: opacity 0.2s ease, width 0.18s ease, height 0.18s ease,
+    margin 0.18s ease, border-color 0.18s ease;
+}
+
+/* Center dot — snappier */
+.bx-cursor-dot {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 6px;
+  height: 6px;
+  margin: -3px 0 0 -3px;
+  background: var(--void);
+  border-radius: 50%;
+  box-shadow: 0 0 8px rgba(155, 107, 255, 0.6);
+  will-change: transform;
+  transition: opacity 0.2s ease, background 0.15s ease, width 0.15s ease,
+    height 0.15s ease, margin 0.15s ease;
+}
+
+/* Hover frame — snaps to the element box (left/top/size animate) */
+.bx-cursor-frame {
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 0;
+  height: 0;
+  border: 1.5px solid var(--ignite);
+  border-radius: 8px;
+  background: rgba(255, 107, 26, 0.05);
+  opacity: 0;
+  will-change: left, top, width, height, transform;
+  transition: left 0.18s cubic-bezier(0.22, 1, 0.36, 1),
+    top 0.18s cubic-bezier(0.22, 1, 0.36, 1),
+    width 0.18s cubic-bezier(0.22, 1, 0.36, 1),
+    height 0.18s cubic-bezier(0.22, 1, 0.36, 1), opacity 0.15s ease,
+    background 0.15s ease, transform 0.12s ease, box-shadow 0.15s ease,
+    border-color 0.15s ease;
+}
+
+/* Hover state */
+.is-hovering .bx-cursor-ring {
+  opacity: 0;
+}
+.is-hovering .bx-cursor-dot {
+  opacity: 0;
+}
+.is-hovering .bx-cursor-frame {
+  opacity: 1;
+}
+
+/* Press state — very visible "about to click" */
+.is-pressing .bx-cursor-frame {
+  transform: scale(0.96);
+  background: rgba(255, 107, 26, 0.2);
+  border-color: #ff8a3d;
+  box-shadow: 0 0 24px rgba(255, 107, 26, 0.55),
+    inset 0 0 20px rgba(255, 107, 26, 0.18);
+}
+/* Press feedback when NOT over a target (raw click anywhere) */
+.is-pressing .bx-cursor-ring {
+  width: 16px;
+  height: 16px;
+  margin: -8px 0 0 -8px;
+  border-color: var(--ignite);
+  opacity: 0.9;
+}
+.is-pressing .bx-cursor-dot {
+  background: var(--ignite);
+  width: 8px;
+  height: 8px;
+  margin: -4px 0 0 -4px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .bx-cursor-ring,
+  .bx-cursor-dot,
+  .bx-cursor-frame {
+    transition: opacity 0.1s ease;
+  }
+}
