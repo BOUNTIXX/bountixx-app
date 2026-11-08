@@ -16,6 +16,7 @@ import { AppLayout } from "@/components/layout/AppLayout";
 import { AppPage } from "@/components/landing/_section";
 import { Button } from "@/components/ui/Button";
 import { featuredRush, rushPrinciples, type RushTrack } from "@/lib/communityRush";
+import { RushDirectory } from "@/components/rush/RushDirectory";
 
 const trackIcon: Record<RushTrack, typeof Swords> = {
   arena: Swords,
@@ -60,9 +61,9 @@ export default function CommunityRushPage() {
                 Community Rush gives an organiser one home for the activities their people already care about. Play, learn, build, contribute, and make capable people visible through real work.
               </p>
               <div className="mt-8 flex flex-col gap-3 sm:flex-row sm:items-center">
-                <Link href="/create">
+                <Link href="/rush/new">
                   <Button size="lg" magnetic className="w-full gap-2 sm:w-auto">
-                    Create an arena <ArrowRight size={16} aria-hidden />
+                    Start a Rush <ArrowRight size={16} aria-hidden />
                   </Button>
                 </Link>
                 <a
@@ -141,6 +142,8 @@ export default function CommunityRushPage() {
             })}
           </div>
         </section>
+
+        <RushDirectory />
 
         <section id="verified-rush" className="scroll-mt-24 rounded-2xl border border-[var(--border-1)] bg-[var(--surface-raised)] p-6 sm:p-9 md:p-11">
           <div className="grid gap-10 lg:grid-cols-[minmax(0,0.9fr)_minmax(0,1.1fr)] lg:items-start">

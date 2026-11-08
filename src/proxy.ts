@@ -18,6 +18,9 @@ const isAuthPage = createRouteMatcher(["/login(.*)", "/signup(.*)"]);
 // listed here — they call getSession() / requireClerkAuth() and return 401 JSON.
 const isProtectedRoute = createRouteMatcher([
   "/dashboard(.*)",
+  "/rush/new(.*)",
+  "/rush/manage(.*)",
+  "/rush/(.*)/edit(.*)",
   "/create(.*)",
   "/arena(.*)",
   "/lobby(.*)",

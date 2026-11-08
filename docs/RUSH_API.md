@@ -59,5 +59,12 @@ Validation rules:
 - `GET /api/rushes/:slug` returns a published campaign to anyone. A draft is
   returned only to the organiser who owns it. Other callers receive `404`.
 
+## `PATCH /api/rushes/:slug`
+
+Requires the draft's organiser. Send the same body shape as `POST`, retaining
+the original slug. The request replaces the current draft snapshot. Send
+`publish: true` to lock and publish it; the response contains its immutable
+canonical manifest hash. Published campaigns reject updates with `409`.
+
 The manifest is deliberately public only after publication. Do not expose
 drafts through unauthenticated discovery or use this API as a payout endpoint.

@@ -15,7 +15,7 @@ import {
 } from "@/lib/rushManifest";
 import { rushCampaigns } from "@/lib/schema";
 
-function campaignResponse(campaign: typeof rushCampaigns.$inferSelect) {
+function campaignResponse(campaign: typeof rushCampaigns.$inferSelect, isOwner = false) {
   return {
     id: campaign.id,
     slug: campaign.slug,
@@ -29,6 +29,7 @@ function campaignResponse(campaign: typeof rushCampaigns.$inferSelect) {
     publishedAt: campaign.publishedAt,
     createdAt: campaign.createdAt,
     updatedAt: campaign.updatedAt,
+    isOwner,
   };
 }
 
@@ -56,7 +57,9 @@ export async function GET(req: Request) {
       .where(where)
       .orderBy(desc(rushCampaigns.createdAt));
 
-    return NextResponse.json({ campaigns: campaigns.map(campaignResponse) });
+    return NextResponse.json({
+      campaigns: campaigns.map((campaign) => campaignResponse(campaign, campaign.organizerId === session?.id)),
+    });
   } catch (err) {
     console.error("[GET /api/rushes]", err);
     return sessionUnavailable("Community Rush is temporarily unavailable.");
@@ -109,7 +112,7 @@ export async function POST(req: Request) {
       })
       .returning();
 
-    return NextResponse.json({ campaign: campaignResponse(created) }, { status: 201 });
+    return NextResponse.json({ campaign: campaignResponse(created, true) }, { status: 201 });
   } catch (err) {
     if (err instanceof RushManifestValidationError) {
       return NextResponse.json({ error: err.message }, { status: 400 });
