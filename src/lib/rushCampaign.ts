@@ -1,4 +1,5 @@
 import type { RushManifest } from "@bountixx/rush-sdk";
+import type { ResultAttestation } from "@bountixx/rush-sdk";
 
 export type RushCampaignStatus = "draft" | "published" | "archived";
 export type RushVerification = "standard" | "verified";
@@ -28,6 +29,7 @@ export type RushCampaign = {
   createdAt: string;
   updatedAt: string;
   isOwner?: boolean;
+  attestations?: ResultAttestation[];
 };
 
 export function formatRushDate(value: string): string {

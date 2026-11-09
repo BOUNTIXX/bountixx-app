@@ -35,6 +35,12 @@ inside the Drips workspace. This repository's source of product intent remains
 - Verified Rush proof pages display the public Testnet vault reference from
   `NEXT_PUBLIC_RUSH_VAULT_TESTNET_ID`. The reference is explicitly not proof
   that an individual campaign has been funded.
+- `rush_attestations` stores append-only, verifier-signed Proof Marks. The
+  app accepts them only through its secret-protected internal ingestion route,
+  after verifying the configured Ed25519 public key against the locked
+  manifest. Required deployment-only secrets are
+  `RUSH_VERIFIER_INGEST_SECRET` and `RUSH_VERIFIER_PUBLIC_KEY_PEM`; they must
+  never be `NEXT_PUBLIC_*` values or live in a client bundle.
 - Existing Neon deployments can apply the additive table through
   `npm run db:patch`; normal request paths also run the idempotent schema
   patch. The generated Drizzle migration is forward-safe for fresh or already

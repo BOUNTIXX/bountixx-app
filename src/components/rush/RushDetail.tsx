@@ -10,6 +10,7 @@ import { fetchWithAuth } from "@/lib/fetchWithAuth";
 import { formatRushDate, shortHash, type RushCampaign } from "@/lib/rushCampaign";
 import { rushVaultTestnetId, rushVaultTestnetUrl } from "@/lib/rushConfig";
 import { RushActivityList } from "./RushActivityList";
+import { RushProofMarks } from "./RushProofMarks";
 
 export function RushDetail({ slug }: { slug: string }) {
   const [campaign, setCampaign] = useState<RushCampaign | null>(null);
@@ -47,7 +48,7 @@ function CampaignContent({ campaign }: { campaign: RushCampaign }) {
   return <div className="mx-auto flex w-full max-w-6xl flex-col gap-8">
     <header className="flex flex-col gap-5 border-b border-[var(--border-1)] pb-7 sm:flex-row sm:items-start sm:justify-between"><div><Link href="/rush" className="inline-flex items-center gap-2 font-mono text-[10px] uppercase tracking-[0.15em] text-haze-3 transition hover:text-haze"><ArrowLeft size={13} /> Community Rush</Link><div className="mt-5 flex flex-wrap items-center gap-3"><span className={`rounded-full border px-3 py-1 font-mono text-[10px] uppercase tracking-[0.14em] ${isDraft ? "border-coin-gold/30 bg-coin-gold/10 text-coin-gold" : campaign.verification === "verified" ? "border-success/30 bg-success/10 text-success" : "border-[var(--border-accent)] bg-[var(--void-tint)] text-[var(--brand-primary)]"}`}>{isDraft ? "Private draft" : campaign.verification === "verified" ? "Verified Rush" : "Standard Rush"}</span><span className="font-mono text-[10px] uppercase tracking-[0.14em] text-haze-3">{campaign.community}</span></div><h1 className="mt-4 font-display text-3xl leading-tight text-haze sm:text-5xl">{campaign.name}</h1><p className="mt-5 max-w-3xl font-body text-base leading-relaxed text-haze-2">{campaign.summary}</p></div>{campaign.isOwner && isDraft ? <Link href={`/rush/${campaign.slug}/edit`}><Button><PenLine size={16} /> Continue draft</Button></Link> : null}</header>
     {isDraft ? <div className="flex gap-3 rounded-xl border border-coin-gold/30 bg-coin-gold/10 p-4"><CircleAlert size={18} className="mt-0.5 shrink-0 text-coin-gold" /><p className="font-body text-sm leading-relaxed text-haze-2">Only you can see this draft. Publish when its schedule, programme, scoring, and reward terms are ready to become an immutable campaign record.</p></div> : null}
-    <div className="grid gap-6 lg:grid-cols-[minmax(0,1fr)_18rem]"><div className="space-y-6"><Rules manifest={manifest} /><RushActivityList activities={campaign.activities} />{campaign.verification === "verified" ? <VerifiedNotice /> : null}</div><aside className="h-fit space-y-4 lg:sticky lg:top-24"><RewardCard campaign={campaign} /><ProofCard campaign={campaign} /></aside></div>
+    <div className="grid gap-6 lg:grid-cols-[minmax(0,1fr)_18rem]"><div className="space-y-6"><Rules manifest={manifest} /><RushActivityList activities={campaign.activities} /><RushProofMarks attestations={campaign.attestations} />{campaign.verification === "verified" ? <VerifiedNotice /> : null}</div><aside className="h-fit space-y-4 lg:sticky lg:top-24"><RewardCard campaign={campaign} /><ProofCard campaign={campaign} /></aside></div>
   </div>;
 }
 

@@ -82,3 +82,23 @@ canonical manifest hash. Published campaigns reject updates with `409`.
 
 The manifest is deliberately public only after publication. Do not expose
 drafts through unauthenticated discovery or use this API as a payout endpoint.
+
+## Proof Marks and verifier ingestion
+
+`GET /api/rushes/:slug/attestations` exposes only the signed Proof Marks for a
+published campaign. It returns `404` for drafts and never exposes any verifier
+credential.
+
+`POST /api/rushes/:slug/attestations` is an internal service-to-service route,
+not a browser API. It accepts a complete SDK `ResultAttestation` only when all
+of the following hold:
+
+- `Authorization: Bearer <RUSH_VERIFIER_INGEST_SECRET>` matches exactly;
+- `RUSH_VERIFIER_PUBLIC_KEY_PEM` cryptographically verifies the Ed25519
+  signature;
+- the campaign is published, is `verified`, and its stored manifest hash and
+  arena ID match the attestation.
+
+The route stores the canonical proof object append-only and replays an exact
+result/signature pair safely. It does not invoke Soroban or represent a stored
+Proof Mark as a settled reward.

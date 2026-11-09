@@ -1,11 +1,11 @@
 export const dynamic = "force-dynamic";
 
-import { eq } from "drizzle-orm";
+import { desc, eq } from "drizzle-orm";
 import { NextResponse } from "next/server";
 import { db } from "@/lib/db";
 import { ensureDatabaseSchema } from "@/lib/ensureSchema";
 import { getSession, sessionUnavailable } from "@/lib/getSession";
-import { rushCampaigns } from "@/lib/schema";
+import { rushAttestations, rushCampaigns } from "@/lib/schema";
 import {
   buildRushManifest,
   hashRushManifest,
@@ -24,7 +24,18 @@ function activitiesFromJson(value: string): CommunityRushActivity[] {
   }
 }
 
-function campaignResponse(campaign: typeof rushCampaigns.$inferSelect, isOwner = false) {
+function attestationsFromRows(rows: Array<typeof rushAttestations.$inferSelect>) {
+  return rows.flatMap((row) => {
+    try {
+      const parsed = JSON.parse(row.attestationJson);
+      return parsed && typeof parsed === "object" ? [parsed] : [];
+    } catch {
+      return [];
+    }
+  });
+}
+
+function campaignResponse(campaign: typeof rushCampaigns.$inferSelect, isOwner = false, attestations = attestationsFromRows([])) {
   return {
     id: campaign.id,
     slug: campaign.slug,
@@ -36,6 +47,7 @@ function campaignResponse(campaign: typeof rushCampaigns.$inferSelect, isOwner =
     manifest: JSON.parse(campaign.manifestJson) as unknown,
     activities: activitiesFromJson(campaign.activitiesJson),
     manifestHash: campaign.manifestHash,
+    attestations,
     publishedAt: campaign.publishedAt,
     createdAt: campaign.createdAt,
     updatedAt: campaign.updatedAt,
@@ -60,7 +72,10 @@ export async function GET(req: Request, { params }: { params: Promise<{ slug: st
       return NextResponse.json({ error: "Community Rush not found." }, { status: 404 });
     }
 
-    return NextResponse.json({ campaign: campaignResponse(campaign, campaign.organizerId === session?.id) });
+    const attestations = campaign.status === "published"
+      ? await db.select().from(rushAttestations).where(eq(rushAttestations.campaignId, campaign.id)).orderBy(desc(rushAttestations.issuedAt))
+      : [];
+    return NextResponse.json({ campaign: campaignResponse(campaign, campaign.organizerId === session?.id, attestationsFromRows(attestations)) });
   } catch (err) {
     console.error("[GET /api/rushes/[slug]]", err);
     return sessionUnavailable("Community Rush is temporarily unavailable.");

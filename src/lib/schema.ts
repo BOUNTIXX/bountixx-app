@@ -143,3 +143,18 @@ export const rushCampaigns = pgTable("rush_campaigns", {
   createdAt: timestamp("created_at").defaultNow().notNull(),
   updatedAt: timestamp("updated_at").defaultNow().notNull(),
 });
+
+/** A verifier-signed, append-only result proof for a published Verified Rush. */
+export const rushAttestations = pgTable("rush_attestations", {
+  id: text("id").primaryKey(),
+  campaignId: text("campaign_id").notNull().references(() => rushCampaigns.id),
+  manifestHash: text("manifest_hash").notNull(),
+  arenaId: text("arena_id").notNull(),
+  winnerAddress: text("winner_address").notNull(),
+  resultHash: text("result_hash").notNull(),
+  issuedAt: timestamp("issued_at").notNull(),
+  verifierKeyId: text("verifier_key_id").notNull(),
+  signature: text("signature").notNull(),
+  attestationJson: text("attestation_json").notNull(),
+  createdAt: timestamp("created_at").defaultNow().notNull(),
+});
