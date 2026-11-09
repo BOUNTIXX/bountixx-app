@@ -1,0 +1,30 @@
+name: Scoped task
+description: A well-defined piece of work a contributor can pick up.
+labels: ["enhancement"]
+body:
+  - type: textarea
+    id: context
+    attributes:
+      label: Context
+      description: Why this matters and which part of the Community Rush flow it touches.
+    validations:
+      required: true
+  - type: textarea
+    id: scope
+    attributes:
+      label: Scope
+      description: What is in and out of scope.
+    validations:
+      required: true
+  - type: textarea
+    id: acceptance
+    attributes:
+      label: Acceptance criteria
+      placeholder: "- [ ] ...\n- [ ] Tests cover ...\n- [ ] Docs updated"
+    validations:
+      required: true
+  - type: dropdown
+    id: complexity
+    attributes:
+      label: Estimated complexity
+      options: ["Trivial", "Medium", "High"]

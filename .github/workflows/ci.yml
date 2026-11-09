@@ -1,0 +1,34 @@
+name: CI
+on:
+  push:
+    branches: [main]
+  pull_request:
+permissions:
+  contents: read
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      # The app depends on the sibling SDK via file:../bountixx-rush-sdk.
+      - uses: actions/checkout@v4
+        with:
+          path: bountixx-app
+      - uses: actions/checkout@v4
+        with:
+          repository: BOUNTIXX/bountixx-rush-sdk
+          path: bountixx-rush-sdk
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - name: Build SDK
+        working-directory: bountixx-rush-sdk
+        run: npm ci && npm run build
+      - name: Install
+        working-directory: bountixx-app
+        run: npm ci
+      - name: Lint
+        working-directory: bountixx-app
+        run: npm run lint
+      - name: Type-check
+        working-directory: bountixx-app
+        run: npx tsc --noEmit

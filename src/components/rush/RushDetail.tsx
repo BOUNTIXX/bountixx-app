@@ -8,9 +8,10 @@ import { AppPage } from "@/components/landing/_section";
 import { Button } from "@/components/ui/Button";
 import { fetchWithAuth } from "@/lib/fetchWithAuth";
 import { formatRushDate, shortHash, type RushCampaign } from "@/lib/rushCampaign";
-import { rushVaultTestnetId, rushVaultTestnetUrl } from "@/lib/rushConfig";
+import { rushVaultTestnetUrl } from "@/lib/rushConfig";
 import { RushActivityList } from "./RushActivityList";
 import { RushProofMarks } from "./RushProofMarks";
+import { RushVaultStatus } from "./RushVaultStatus";
 
 export function RushDetail({ slug }: { slug: string }) {
   const [campaign, setCampaign] = useState<RushCampaign | null>(null);
@@ -57,12 +58,12 @@ function Rules({ manifest }: { manifest: RushCampaign["manifest"] }) {
 }
 
 function VerifiedNotice() {
-  return <section className="rounded-2xl border border-success/25 bg-success/5 p-6 sm:p-8"><div className="flex items-center gap-3"><ShieldCheck size={20} className="text-success" /><h2 className="font-display text-2xl text-haze">Verified Rush status</h2></div><p className="mt-4 font-body text-sm leading-relaxed text-haze-2">This is a published Testnet XLM rule record. A sponsor-funded vault, verifier attestation, and settlement transaction are separate steps and are not represented as live here.</p><a href={rushVaultTestnetUrl} target="_blank" rel="noreferrer" className="mt-5 inline-flex items-center gap-2 font-mono text-xs text-success transition hover:text-haze">View the Testnet vault reference <span aria-hidden>↗</span></a></section>;
+  return <section className="rounded-2xl border border-success/25 bg-success/5 p-6 sm:p-8"><div className="flex items-center gap-3"><ShieldCheck size={20} className="text-success" /><h2 className="font-display text-2xl text-haze">Verified Rush status</h2></div><p className="mt-4 font-body text-sm leading-relaxed text-haze-2">These rules are locked and published. A sponsor funds the Testnet vault against this manifest hash, the private verifier signs a Proof Mark for the deterministic winner, and only then can the vault settle. The vault status beside this page is read directly from Stellar Testnet.</p><a href={rushVaultTestnetUrl} target="_blank" rel="noreferrer" className="mt-5 inline-flex items-center gap-2 font-mono text-xs text-success transition hover:text-haze">View the Testnet vault reference <span aria-hidden>↗</span></a></section>;
 }
 
 function RewardCard({ campaign }: { campaign: RushCampaign }) {
   const { manifest } = campaign;
-  return <><div className="rounded-2xl border border-[var(--border-1)] bg-[var(--surface-inset)] p-5"><Trophy size={19} className="text-coin-gold" /><p className="mt-4 font-mono text-[10px] uppercase tracking-[0.15em] text-haze-3">Reward</p><p className="mt-2 font-display text-3xl text-haze">{manifest.prize.amount} <span className="text-xl text-coin-gold">{manifest.prize.asset}</span></p><p className="mt-2 font-body text-xs leading-relaxed text-haze-3">{campaign.verification === "verified" ? "Testnet rules only. Funding is not implied." : "Non-transferable Bountixx points."}</p></div>{campaign.verification === "verified" ? <div className="rounded-2xl border border-success/25 bg-success/5 p-5"><p className="font-mono text-[10px] uppercase tracking-[0.15em] text-success">Testnet vault</p><p className="mt-2 break-all font-mono text-xs leading-relaxed text-haze-2">{rushVaultTestnetId}</p><p className="mt-3 font-body text-xs leading-relaxed text-haze-3">A deployed empty vault. It is not evidence that this campaign has funding.</p></div> : null}</>;
+  return <><div className="rounded-2xl border border-[var(--border-1)] bg-[var(--surface-inset)] p-5"><Trophy size={19} className="text-coin-gold" /><p className="mt-4 font-mono text-[10px] uppercase tracking-[0.15em] text-haze-3">Reward</p><p className="mt-2 font-display text-3xl text-haze">{manifest.prize.amount} <span className="text-xl text-coin-gold">{manifest.prize.asset}</span></p><p className="mt-2 font-body text-xs leading-relaxed text-haze-3">{campaign.verification === "verified" ? "Testnet XLM. Funding status is read live from the vault." : "Non-transferable Bountixx points."}</p></div>{campaign.verification === "verified" && campaign.status === "published" ? <RushVaultStatus slug={campaign.slug} /> : null}</>;
 }
 
 function ProofCard({ campaign }: { campaign: RushCampaign }) {
