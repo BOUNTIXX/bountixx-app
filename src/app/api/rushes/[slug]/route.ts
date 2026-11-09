@@ -13,6 +13,16 @@ import {
   serializeRushManifest,
 } from "@/lib/rushManifest";
 import { requireClerkAuth } from "@/lib/requireAuth";
+import type { CommunityRushActivity } from "@/lib/rushCampaign";
+
+function activitiesFromJson(value: string): CommunityRushActivity[] {
+  try {
+    const parsed = JSON.parse(value);
+    return Array.isArray(parsed) ? parsed as CommunityRushActivity[] : [];
+  } catch {
+    return [];
+  }
+}
 
 function campaignResponse(campaign: typeof rushCampaigns.$inferSelect, isOwner = false) {
   return {
@@ -24,6 +34,7 @@ function campaignResponse(campaign: typeof rushCampaigns.$inferSelect, isOwner =
     status: campaign.status,
     verification: campaign.verification,
     manifest: JSON.parse(campaign.manifestJson) as unknown,
+    activities: activitiesFromJson(campaign.activitiesJson),
     manifestHash: campaign.manifestHash,
     publishedAt: campaign.publishedAt,
     createdAt: campaign.createdAt,
@@ -104,6 +115,7 @@ export async function PATCH(req: Request, { params }: { params: Promise<{ slug: 
         status,
         verification: campaign.verification,
         manifestJson: serializeRushManifest(manifest),
+        activitiesJson: JSON.stringify(campaign.activities),
         manifestHash: campaign.publish ? hashRushManifest(manifest) : null,
         publishedAt: campaign.publish ? now : null,
         updatedAt: now,

@@ -18,8 +18,9 @@ inside the Drips workspace. This repository's source of product intent remains
 ## Community Rush persistence baseline
 
 - `rush_campaigns` stores organiser-owned campaign drafts and published
-  campaign records. It never stores wallet credentials, transaction payloads,
-  or verifier keys.
+  campaign records, including an ordered programme of 1–12 arenas, quests,
+  workshops, or bounties. It never stores wallet credentials, transaction
+  payloads, or verifier keys.
 - `POST /api/rushes` creates a draft by default. Sending `publish: true`
   publishes on creation and records a SHA-256 hash of the canonical SDK
   manifest. Published manifests must be treated as immutable.

@@ -2,6 +2,16 @@ import type { RushManifest } from "@bountixx/rush-sdk";
 
 export type RushCampaignStatus = "draft" | "published" | "archived";
 export type RushVerification = "standard" | "verified";
+export type CommunityRushActivityKind = "arena" | "quest" | "workshop" | "bounty";
+
+/** A participant-facing item within a Community Rush programme. */
+export type CommunityRushActivity = {
+  kind: CommunityRushActivityKind;
+  title: string;
+  description: string;
+  time: string;
+  points: number;
+};
 
 export type RushCampaign = {
   id: string;
@@ -12,6 +22,7 @@ export type RushCampaign = {
   status: RushCampaignStatus;
   verification: RushVerification;
   manifest: RushManifest;
+  activities: CommunityRushActivity[];
   manifestHash: string | null;
   publishedAt: string | null;
   createdAt: string;

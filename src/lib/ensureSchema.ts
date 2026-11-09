@@ -106,6 +106,9 @@ async function runSchemaStatements(): Promise<void> {
       )
     `,
   );
+  await safeStep("rush_campaigns.activities_json", () =>
+    sql`ALTER TABLE rush_campaigns ADD COLUMN IF NOT EXISTS activities_json text NOT NULL DEFAULT '[]'`,
+  );
 }
 
 /** Ensures Neon has columns required by the current app code. */

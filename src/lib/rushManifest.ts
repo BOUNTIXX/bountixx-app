@@ -7,6 +7,7 @@ import {
   type RushChallengeType,
   type RushManifest,
 } from "@bountixx/rush-sdk";
+import type { CommunityRushActivity, CommunityRushActivityKind } from "./rushCampaign";
 
 export type RushVerification = "standard" | "verified";
 
@@ -15,6 +16,7 @@ export interface CreateRushCampaignInput {
   community: string;
   summary: string;
   verification: RushVerification;
+  activities: CommunityRushActivity[];
   publish?: boolean;
   manifest: Omit<RushManifest, "campaignId">;
 }
@@ -28,6 +30,7 @@ const payoutModes = new Set<RushManifest["payout"]>(["winner-takes-all", "ranked
 const resultPolicies = new Set<RushManifest["resultPolicy"]>([
   "deterministic", "organizer-reviewed",
 ]);
+const activityKinds = new Set<CommunityRushActivityKind>(["arena", "quest", "workshop", "bounty"]);
 
 function requiredText(value: unknown, field: string, maxLength: number): string {
   if (typeof value !== "string") {
@@ -55,6 +58,32 @@ function parseAmount(value: unknown): string {
     throw new RushManifestValidationError("manifest.prize.amount must be a positive decimal amount.");
   }
   return amount;
+}
+
+function parseActivities(value: unknown): CommunityRushActivity[] {
+  if (!Array.isArray(value) || value.length === 0 || value.length > 12) {
+    throw new RushManifestValidationError("activities must contain between 1 and 12 programme items.");
+  }
+
+  return value.map((item, index) => {
+    if (!item || typeof item !== "object" || Array.isArray(item)) {
+      throw new RushManifestValidationError(`activities[${index}] must be an object.`);
+    }
+    const activity = item as Record<string, unknown>;
+    if (typeof activity.kind !== "string" || !activityKinds.has(activity.kind as CommunityRushActivityKind)) {
+      throw new RushManifestValidationError(`activities[${index}].kind is not supported.`);
+    }
+    if (typeof activity.points !== "number" || !Number.isInteger(activity.points) || activity.points < 0 || activity.points > 100_000) {
+      throw new RushManifestValidationError(`activities[${index}].points must be a whole number from 0 to 100000.`);
+    }
+    return {
+      kind: activity.kind as CommunityRushActivityKind,
+      title: requiredText(activity.title, `activities[${index}].title`, 120),
+      description: requiredText(activity.description, `activities[${index}].description`, 600),
+      time: requiredText(activity.time, `activities[${index}].time`, 120),
+      points: activity.points,
+    };
+  });
 }
 
 /**
@@ -152,6 +181,7 @@ export function buildRushManifest(
       community: requiredText(body.community, "community", 120),
       summary: requiredText(body.summary, "summary", 600),
       verification,
+      activities: parseActivities(body.activities),
       publish: body.publish === true,
     },
     manifest: normalizedManifest,

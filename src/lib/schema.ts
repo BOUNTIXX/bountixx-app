@@ -136,6 +136,8 @@ export const rushCampaigns = pgTable("rush_campaigns", {
   status: rushCampaignStatusEnum("status").default("draft").notNull(),
   verification: rushVerificationEnum("verification").default("standard").notNull(),
   manifestJson: text("manifest_json").notNull(),
+  /** Ordered programme activities: arenas, quests, workshops, and bounties. */
+  activitiesJson: text("activities_json").default("[]").notNull(),
   manifestHash: text("manifest_hash"),
   publishedAt: timestamp("published_at"),
   createdAt: timestamp("created_at").defaultNow().notNull(),

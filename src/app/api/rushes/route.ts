@@ -14,6 +14,16 @@ import {
   serializeRushManifest,
 } from "@/lib/rushManifest";
 import { rushCampaigns } from "@/lib/schema";
+import type { CommunityRushActivity } from "@/lib/rushCampaign";
+
+function activitiesFromJson(value: string): CommunityRushActivity[] {
+  try {
+    const parsed = JSON.parse(value);
+    return Array.isArray(parsed) ? parsed as CommunityRushActivity[] : [];
+  } catch {
+    return [];
+  }
+}
 
 function campaignResponse(campaign: typeof rushCampaigns.$inferSelect, isOwner = false) {
   return {
@@ -25,6 +35,7 @@ function campaignResponse(campaign: typeof rushCampaigns.$inferSelect, isOwner =
     status: campaign.status,
     verification: campaign.verification,
     manifest: JSON.parse(campaign.manifestJson) as unknown,
+    activities: activitiesFromJson(campaign.activitiesJson),
     manifestHash: campaign.manifestHash,
     publishedAt: campaign.publishedAt,
     createdAt: campaign.createdAt,
@@ -105,6 +116,7 @@ export async function POST(req: Request) {
         status,
         verification: campaign.verification,
         manifestJson: serializeRushManifest(manifest),
+        activitiesJson: JSON.stringify(campaign.activities),
         manifestHash,
         publishedAt: campaign.publish ? now : null,
         createdAt: now,

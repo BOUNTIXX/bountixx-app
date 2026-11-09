@@ -76,6 +76,10 @@ const steps = [
       )
     `,
   ],
+  [
+    "rush_campaigns.activities_json",
+    () => sql`ALTER TABLE rush_campaigns ADD COLUMN IF NOT EXISTS activities_json text NOT NULL DEFAULT '[]'`,
+  ],
 ];
 
 for (const [label, run] of steps) {

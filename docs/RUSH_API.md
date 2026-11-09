@@ -6,9 +6,10 @@ keys, submit transactions, or invoke a Rush Vault.
 
 ## Persistence model
 
-`rush_campaigns` holds a canonical JSON snapshot of the manifest. A draft has
-no `manifestHash`. Publishing at creation sets a SHA-256 hash over the SDK's
-canonical JSON form and records `publishedAt`.
+`rush_campaigns` holds a canonical JSON snapshot of the rules manifest plus an
+ordered JSON programme of activities. A draft has no `manifestHash`. Publishing
+at creation sets a SHA-256 hash over the SDK's canonical JSON form and records
+`publishedAt`.
 
 Published campaigns are proof records. Do not add a route that edits their
 manifest or silently changes the stored canonical JSON. If a future revision
@@ -25,6 +26,15 @@ Requires a signed-in organiser. It accepts the following shape:
   "summary": "A short public description of the programme.",
   "verification": "standard",
   "publish": false,
+  "activities": [
+    {
+      "kind": "arena",
+      "title": "Build the verifier",
+      "description": "Complete the scored builder challenge.",
+      "time": "Week 1 · Online",
+      "points": 250
+    }
+  ],
   "manifest": {
     "arenaId": "planned-arena-id",
     "title": "Builder Rush",
@@ -51,6 +61,10 @@ Validation rules:
   campaign is not proof of funding or a promise of a payout.
 - The shared SDK validates manifest invariants; the app also validates
   organiser metadata and release-specific safety restrictions.
+- Each campaign has one to twelve programme activities. Activity kinds are
+  `arena`, `quest`, `workshop`, and `bounty`; their title, participant-facing
+  description, schedule/location label, and non-negative Crown value are
+  validated and retained with the campaign.
 
 ## Read routes
 

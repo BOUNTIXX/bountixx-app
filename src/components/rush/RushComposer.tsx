@@ -17,7 +17,8 @@ import { AppLayout } from "@/components/layout/AppLayout";
 import { AppPage } from "@/components/landing/_section";
 import { Button } from "@/components/ui/Button";
 import { fetchWithAuth } from "@/lib/fetchWithAuth";
-import type { RushCampaign, RushVerification } from "@/lib/rushCampaign";
+import type { CommunityRushActivity, RushCampaign, RushVerification } from "@/lib/rushCampaign";
+import { RushActivitiesEditor } from "./RushActivitiesEditor";
 
 type FormState = {
   slug: string;
@@ -33,6 +34,7 @@ type FormState = {
   payout: "ranked" | "winner-takes-all";
   resultPolicy: "deterministic" | "organizer-reviewed";
   verification: RushVerification;
+  activities: CommunityRushActivity[];
 };
 
 const challengeOptions: { value: FormState["challengeType"]; label: string }[] = [
@@ -68,6 +70,7 @@ function defaultState(): FormState {
     payout: "ranked",
     resultPolicy: "deterministic",
     verification: "standard",
+    activities: [{ kind: "arena", title: "", description: "", time: "", points: 100 }],
   };
 }
 
@@ -87,6 +90,7 @@ function stateFromCampaign(campaign: RushCampaign): FormState {
     payout: manifest.payout,
     resultPolicy: manifest.resultPolicy,
     verification: campaign.verification,
+    activities: campaign.activities.length > 0 ? campaign.activities : [{ kind: "arena", title: "", description: "", time: "", points: 100 }],
   };
 }
 
@@ -158,6 +162,7 @@ export function RushComposer({ draftSlug }: { draftSlug?: string }) {
           community: form.community,
           summary: form.summary,
           verification: form.verification,
+          activities: form.activities,
           publish,
           manifest: {
             arenaId: form.arenaId,
@@ -222,6 +227,8 @@ export function RushComposer({ draftSlug }: { draftSlug?: string }) {
                 <div className="sm:col-span-2"><Field label="Campaign summary"><textarea required value={form.summary} onChange={(e) => update("summary", e.target.value)} maxLength={600} rows={4} className={`${inputClass} resize-y`} placeholder="What people will build, learn, or prove together." /></Field></div>
               </div>
             </section>
+
+            <RushActivitiesEditor activities={form.activities} onChange={(activities) => update("activities", activities)} />
 
             <section className="rounded-2xl border border-[var(--border-1)] bg-[var(--surface-raised)] p-5 sm:p-7">
               <div className="mb-6 flex items-center gap-3"><Sparkles size={18} className="text-coin-gold" /><h2 className="font-display text-xl text-haze">Challenge and scoring</h2></div>
