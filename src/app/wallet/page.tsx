@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
-import { Plus, Minus, ShoppingBag } from "lucide-react";
+import { Plus, Minus, Save, ShieldCheck, ShoppingBag } from "lucide-react";
 import { AppLayout } from "@/components/layout/AppLayout";
 import { Button } from "@/components/ui/Button";
 import { AnimatedNumber } from "@/components/ui/AnimatedNumber";
@@ -52,12 +52,15 @@ export default function WalletPage() {
   const [loading, setLoading] = useState(true);
   const [paymentMethod, setPaymentMethod] = useState<PaymentMethod>("paystack");
   const [paying, setPaying] = useState(false);
+  const [stellarAddress, setStellarAddress] = useState("");
+  const [savingStellarAddress, setSavingStellarAddress] = useState(false);
 
   useEffect(() => {
     fetchWithAuth("/api/wallet")
       .then((r) => r.json())
       .then((d) => {
         if (d.balance !== undefined) setBalance(d.balance);
+        if (typeof d.stellarAddress === "string") setStellarAddress(d.stellarAddress);
         if (Array.isArray(d.transactions)) {
           setTxList(
             d.transactions.map((t: { type: string; reference?: string; amount: number; createdAt: string }) => ({
@@ -111,6 +114,24 @@ export default function WalletPage() {
     }
   }
 
+  async function saveStellarRecipient() {
+    setSavingStellarAddress(true);
+    try {
+      const response = await fetchWithAuth("/api/wallet", {
+        method: "PATCH",
+        body: JSON.stringify({ stellarAddress: stellarAddress || null }),
+      });
+      const body = await response.json().catch(() => ({})) as { stellarAddress?: string | null; error?: string };
+      if (!response.ok) throw new Error(body.error ?? "Could not save your Stellar recipient.");
+      setStellarAddress(body.stellarAddress ?? "");
+      toast({ type: "success", title: "Recipient saved", message: body.stellarAddress ? "Your public Testnet recipient is ready for Verified Rushes." : "Your Stellar recipient has been removed." });
+    } catch (error) {
+      toast({ type: "error", title: "Could not save recipient", message: error instanceof Error ? error.message : "Please try again." });
+    } finally {
+      setSavingStellarAddress(false);
+    }
+  }
+
   const selectedBundle = BUNDLES[selected];
   const displayPrice = paymentMethod === "paystack" ? selectedBundle.priceNGN : selectedBundle.priceUSD;
 
@@ -149,6 +170,21 @@ export default function WalletPage() {
                 />
               </div>
             </motion.div>
+
+            <section className="rounded-2xl border border-success/25 bg-success/5 p-6 md:p-7">
+              <div className="flex items-start gap-3">
+                <ShieldCheck size={20} className="mt-0.5 shrink-0 text-success" />
+                <div>
+                  <p className="font-mono text-[10px] uppercase tracking-[0.15em] text-success">Verified Rush recipient</p>
+                  <h2 className="mt-2 font-display text-xl text-haze">Stellar Testnet public key</h2>
+                  <p className="mt-2 max-w-2xl font-body text-sm leading-relaxed text-haze-2">Optional. Add a public G-address only if you choose to receive a sponsor-funded Verified Rush reward. Bountixx never asks for or stores your secret key.</p>
+                </div>
+              </div>
+              <div className="mt-5 flex flex-col gap-3 sm:flex-row">
+                <input value={stellarAddress} onChange={(event) => setStellarAddress(event.target.value.toUpperCase())} maxLength={56} placeholder="G… (Stellar Testnet public key)" className="min-w-0 flex-1 rounded-xl border border-[var(--border-2)] bg-[var(--surface-inset)] px-4 py-3 font-mono text-sm text-haze outline-none transition focus:border-success focus:shadow-[0_0_0_3px_rgba(110,231,183,0.15)] placeholder:font-body placeholder:text-haze-3" />
+                <Button type="button" variant="secondary" onClick={saveStellarRecipient} loading={savingStellarAddress} className="shrink-0"><Save size={16} /> Save recipient</Button>
+              </div>
+            </section>
 
             {/* Filter tabs */}
             <div className="flex gap-1 border-b border-[var(--border-1)] overflow-x-auto -mx-1 px-1">

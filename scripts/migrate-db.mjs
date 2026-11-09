@@ -23,6 +23,7 @@ const steps = [
   ["language", () => sql`ALTER TABLE rooms ADD COLUMN IF NOT EXISTS language text`],
   ["starter_code", () => sql`ALTER TABLE rooms ADD COLUMN IF NOT EXISTS starter_code text`],
   ["last_seen_at", () => sql`ALTER TABLE users ADD COLUMN IF NOT EXISTS last_seen_at timestamp`],
+  ["stellar_address", () => sql`ALTER TABLE users ADD COLUMN IF NOT EXISTS stellar_address text`],
   ["coins default", () => sql`ALTER TABLE users ALTER COLUMN coins_balance SET DEFAULT 1000`],
   [
     "launch coin backfill",

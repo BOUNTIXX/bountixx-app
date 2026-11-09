@@ -12,6 +12,7 @@ import { gradePlayerAnswer } from "@/lib/gradeAnswer";
 import { allCompetitorsFinished, finalizeArena, tryCrownFirstPerfectScorer } from "@/lib/arenaResolver";
 import { computeArenaTimer } from "@/lib/arenaTimer";
 import { checkAndAwardAchievements, updateConsecutiveWins } from "@/lib/achievements";
+import { requestArenaProofMark } from "@/lib/rushVerifierBridge";
 
 const XP_WIN = 200;
 const XP_PARTICIPATION = 25;
@@ -333,6 +334,7 @@ export async function POST(
       }
     }
 
+    if (won) await requestArenaProofMark(roomId);
     return NextResponse.json({
       submission,
       testResults: testResult,
@@ -433,6 +435,7 @@ export async function POST(
     }
   }
 
+  if (won) await requestArenaProofMark(roomId);
   return NextResponse.json({
     submission,
     correct: isCorrect,

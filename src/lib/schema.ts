@@ -16,6 +16,8 @@ export const users = pgTable("users", {
   email: text("email").unique(),
   username: text("username").unique().notNull(),
   avatarUrl: text("avatar_url"),
+  /** Optional Stellar Testnet recipient used only for a Verified Rush settlement. */
+  stellarAddress: text("stellar_address"),
   coinsBalance: integer("coins_balance").default(1000).notNull(),
   xp: integer("xp").default(0).notNull(),
   rank: rankEnum("rank").default("recruit").notNull(),

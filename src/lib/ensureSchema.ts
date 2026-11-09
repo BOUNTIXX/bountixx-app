@@ -40,6 +40,9 @@ async function runSchemaStatements(): Promise<void> {
   await safeStep("users.last_seen_at", () =>
     sql`ALTER TABLE users ADD COLUMN IF NOT EXISTS last_seen_at timestamp`,
   );
+  await safeStep("users.stellar_address", () =>
+    sql`ALTER TABLE users ADD COLUMN IF NOT EXISTS stellar_address text`,
+  );
   await safeStep("users.coins_balance default", () =>
     sql`ALTER TABLE users ALTER COLUMN coins_balance SET DEFAULT 1000`,
   );

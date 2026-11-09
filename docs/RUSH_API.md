@@ -83,6 +83,19 @@ canonical manifest hash. Published campaigns reject updates with `409`.
 The manifest is deliberately public only after publication. Do not expose
 drafts through unauthenticated discovery or use this API as a payout endpoint.
 
+## Private verifier manifest reader
+
+`GET /api/internal/rush-manifests/:campaignId?arenaId=:arenaId` exists only
+for the deployed verifier. It requires an exact
+`Authorization: Bearer <RUSH_VERIFIER_MANIFEST_SECRET>` credential and returns
+only the immutable manifest and hash for a published `verified` campaign whose
+arena ID matches. It returns `404` for drafts, standard campaigns, mismatches,
+and unknown records. Responses use `Cache-Control: no-store`.
+
+Configure the verifier's `RUSH_MANIFEST_READER_SECRET` with the same secret.
+Do not use this route from a browser or expose its credential as a public
+environment variable.
+
 ## Proof Marks and verifier ingestion
 
 `GET /api/rushes/:slug/attestations` exposes only the signed Proof Marks for a
@@ -102,3 +115,10 @@ of the following hold:
 The route stores the canonical proof object append-only and replays an exact
 result/signature pair safely. It does not invoke Soroban or represent a stored
 Proof Mark as a settled reward.
+
+When the app itself resolves a linked Arena, `requestArenaProofMark()` can
+send its persisted winner and submission IDs to the private verifier. It only
+runs if all deployment-only settings are present: `RUSH_VERIFIER_URL`,
+`RUSH_VERIFIER_SHARED_SECRET`, and `RUSH_VERIFIER_PUBLIC_KEY_PEM`. The bridge
+is a no-op when the verifier is not configured; it never lets an organiser or
+browser choose a winner or sign a result.

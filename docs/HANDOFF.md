@@ -41,6 +41,20 @@ inside the Drips workspace. This repository's source of product intent remains
   manifest. Required deployment-only secrets are
   `RUSH_VERIFIER_INGEST_SECRET` and `RUSH_VERIFIER_PUBLIC_KEY_PEM`; they must
   never be `NEXT_PUBLIC_*` values or live in a client bundle.
+- `users.stellar_address` is an optional, user-managed Stellar public key for
+  Testnet reward receipt. It is validated as a `G…` public address through
+  `PATCH /api/wallet`; Bountixx never receives or stores any private key.
+- `requestArenaProofMark()` connects an ended, linked Arena to the verifier
+  using server-only `RUSH_VERIFIER_URL`, `RUSH_VERIFIER_SHARED_SECRET`, and
+  `RUSH_VERIFIER_PUBLIC_KEY_PEM`. It derives the winner from persisted scored
+  submissions and does nothing unless all verifier settings and the winner's
+  public recipient are present. Do not add a browser or organiser shortcut to
+  submit an arbitrary result.
+- `GET /api/internal/rush-manifests/[campaignId]?arenaId=...` is a private
+  verifier-only reader for a published, locked Verified Rush. It uses the
+  deployment secret `RUSH_VERIFIER_MANIFEST_SECRET`; set the verifier's
+  `RUSH_MANIFEST_READER_SECRET` to the same value. It is intentionally neither
+  a browser endpoint nor a general campaign API.
 - Existing Neon deployments can apply the additive table through
   `npm run db:patch`; normal request paths also run the idempotent schema
   patch. The generated Drizzle migration is forward-safe for fresh or already
@@ -50,9 +64,8 @@ See `docs/RUSH_API.md` for the request contract and validation boundary.
 
 ## Do next
 
-Connect a deployed verifier only after its durable manifest reader,
-idempotency store, and secret-managed key are available. Then add a
-server-to-server result submission path and a read-only attestation/proof
-display. Do not add wallet or settlement controls until a Testnet deployment
-has been independently exercised. Do not present a preview campaign as a live
-Stellar event.
+Deploy the verifier with a durable manifest reader, atomic idempotency store,
+and secret-managed key, then configure the app's private bridge variables.
+Do not add Testnet settlement controls until a verifier-backed proof has been
+independently exercised. Do not present a preview campaign as a live Stellar
+event.

@@ -6,6 +6,7 @@ import { ENTRY_FEE } from "./coins";
 import { getRoomQuestions } from "./roomQuestions";
 import { sendNotificationToUser } from "./sendNotification";
 import { checkAndAwardAchievements, updateConsecutiveWins } from "./achievements";
+import { requestArenaProofMark } from "./rushVerifierBridge";
 
 const XP_WIN = 200;
 const XP_PARTICIPATION = 25;
@@ -395,6 +396,9 @@ export async function finalizeArena(roomId: string): Promise<void> {
 
   if (winnerIds.length === 1 && !tieRefund) {
     await crownArenaWinner(roomId, winnerIds[0]);
+    // Timer and forfeit paths end here rather than through a winner's submit
+    // request, so they must still reach the verifier-backed proof flow.
+    await requestArenaProofMark(roomId);
     return;
   }
 
